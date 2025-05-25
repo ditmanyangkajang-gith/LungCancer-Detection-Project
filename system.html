@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lung Cancer Detection System</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        #analysis-section, #results-section {
+            display: none;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .result-item {
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" onclick="showHome()">Home</a>
+        <a href="#" onclick="showAnalysis()">Analysis</a>
+        <a href="#" onclick="showResults()">Results</a>
+    </nav>
+
+    <div class="container" id="home-section">
+        <h1>Welcome to Lung Cancer Detection System</h1>
+        <p>This system allows you to upload CT scan images for lung cancer analysis.</p>
+        <p>Please navigate to the "Analysis" section to upload your images.</p>
+    </div>
+
+    <div class="container" id="analysis-section">
+        <h2>Upload CT Scan Images</h2>
+        <div class="upload-area" id="upload-area">
+            <p>Drag & Drop your files here or click to browse</p>
+            <input type="file" id="file-input" style="display: none;" multiple accept=".jpg, .jpeg, .png, .dcm">
+        </div>
+        <button onclick="processFiles()">Process</button>
+        <div id="file-list"></div>
+    </div>
+
+    <div class="container" id="results-section">
+        <h2>Analysis Results</h2>
+        <div id="results-list">
+            </div>
+    </div>
+
+    <script>
+        function showHome() {
+            document.getElementById('home-section').style.display = 'block';
+            document.getElementById('analysis-section').style.display = 'none';
+            document.getElementById('results-section').style.display = 'none';
+        }
+
+        function showAnalysis() {
+            document.getElementById('home-section').style.display = 'none';
+            document.getElementById('analysis-section').style.display = 'block';
+            document.getElementById('results-section').style.display = 'none';
+        }
+
+        function showResults() {
+            document.getElementById('home-section').style.display = 'none';
+            document.getElementById('analysis-section').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+            displayResults();
+        }
+
+        document.getElementById('upload-area').addEventListener('click', function() {
+            document.getElementById('file-input').click();
+        });
+
+        document.getElementById('file-input').addEventListener('change', handleFileSelect, false);
+
+        function handleFileSelect(evt) {
+            const files = evt.target.files;
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = ''; // Clear previous list
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const listItem = document.createElement('p');
+                listItem.textContent = file.name;
+                fileList.appendChild(listItem);
+            }
+        }
+
+        function processFiles() {
+            const files = document.getElementById('file-input').files;
+            if (files.length === 0) {
+                alert('Please select files to process.');
+                return;
+            }
+
+            // Simulate processing (replace with actual backend processing)
+            const results = [];
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const probability = Math.random(); // Placeholder
+                const result = {
+                    fileName: file.name,
+                    probability: probability,
+                    cancerDetected: probability > 0.5, // Simple threshold for demo
+                };
+                results.push(result);
+            }
+            localStorage.setItem('lungCancerResults', JSON.stringify(results));
+            showResults();
+        }
+
+        function displayResults() {
+            const resultsList = document.getElementById('results-list');
+            resultsList.innerHTML = '';
+            const results = JSON.parse(localStorage.getItem('lungCancerResults')) || [];
+
+            results.forEach(result => {
+                const resultItem = document.createElement('div');
+                resultItem.classList.add('result-item');
+                resultItem.innerHTML = `
+                    <h3>${result.fileName}</h3>
+                    <p>Probability: ${result.probability.toFixed(2)}</p>
+                    <p>Cancer Detected: ${result.cancerDetected ? 'Yes' : 'No'}</p>
+                `;
+                resultsList.appendChild(resultItem);
+            });
+        }
+        showHome(); // Show home page initially
+
+    </script>
+</body>
+</html>
