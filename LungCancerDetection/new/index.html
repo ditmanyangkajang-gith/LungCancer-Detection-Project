@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCD: Lung Cancer Detection </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Lung Cancer Detection</h1>
+        <p>CSIT 2025</p>
+        <div class="authors">
+            <p>Abraham Dit Manyang<sup>1</sup> Sapano Makuei Meen<sup>2</sup> Monica Ayen Bol<sup>3</sup> Ngor Wek Wek<sup>4</sup> Mangar Makur Machiek<sup>5</sup> </p>
+            <p><sup>1</sup> University of Juba &nbsp;&nbsp;&nbsp;&nbsp; <sup>2</sup> CSIT &nbsp;&nbsp;&nbsp;&nbsp; <sup>3</sup> Artificial Intelligence &nbsp;&nbsp;&nbsp;&nbsp; <sup>4</sup> Computer Main Lab</p>
+        </div>
+        <div class="links">
+            <a href="#" class="btn">Paper</a>
+            <a href="#" class="btn">Code</a>
+            <a href="#abstract" class="btn">Abstract</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="abstract">
+            <h2>Abstract</h2>
+            <p> In South Sudan, there’s poor diagnostic procedures; delayed time for lab results, CT Scanned Image Interpretation, MRI image interpretation, Cancer Cells tumor interpretation. Lung Cancer Detection using deep learning involves utilizing advanced artificial intelligence algorithms, particularly convolutional neural networks (CNNs), to analyze medical images.
+                Lung cancer remains a leading cause of cancer-related mortality globally. Early and accurate detection is crucial for improving patient outcomes. This paper presents a Lung Cancer Detection system leveraging Convolutional Neural Networks (CNNs) for the automated analysis of medical images. The system employs a custom-built CNN model designed to classify images into three categories: Normal, Bengin (Benign), and Malignant. The model architecture incorporates multiple convolutional and pooling layers to extract hierarchical features, followed by dense layers for classification. The system was trained and evaluated on a dataset of medical images, demonstrating its ability to learn complex patterns associated with different lung conditions. Performance evaluation on a separate test set shows promising accuracy in distinguishing between normal lungs, benign nodules, and malignant tumors. The confusion matrix and visualization of predictions further illustrate the model's classification capabilities and areas for potential improvement. This work contributes to the development of automated tools for lung cancer screening and diagnosis, potentially aiding medical professionals in making more informed decisions.
+                <b><br>Objective:</br></b>
+Detecting cancer cells in the image of Lung for classification
+
+<b><br> Problem Statement:</br></b>
+In South Sudan, there’s poor diagnostic procedures; delayed time for lab results, CT Scanned Image Interpretation, MRI image interpretation, Cancer Cells detection. lung cancer detection in CT scans, 
+
+                
+                </p>
+        </section>
+
+        <section id="method">
+            <h2>Method Overview</h2>
+            <b>Introduction</b>
+            <p>The Lung Cancer Detection system was developed and evaluated using a dataset of medical images specifically curated for the task of lung cancer classification. The dataset is stored in an HDF5 file named data.h5 and is organized into distinct subsets for training and testing the CNN model.
+                
+               <br> Dataset Structure:</br>
+                
+                The data.h5 file contains the following key components:</br>
+                
+                train-images: A collection of image arrays used for training the CNN model. These images represent scans of lungs, presumably preprocessed to a consistent format suitable for neural network input. The shape of this dataset is confirmed as (number_of_training_samples, image_height, image_width, number_of_channels).
+                <br>train-labels:</br> An array of corresponding labels for the train-images. Each label is an integer representing the class of the respective image (e.g., 0 for Normal, 1 for Benign, 2 for Malignant). The shape is (number_of_training_samples,).
+                <br>test-images:</br> A collection of image arrays used for evaluating the trained CNN model on unseen data. Similar to train-images, these are preprocessed lung scans. The shape is (number_of_testing_samples, image_height, image_width, number_of_channels).
+                <br>test-labels:</br> An array of corresponding labels for the test-images, with integer values representing the class of each image. The shape is (number_of_testing_samples,).
+                <br>Classes:</br>
+                
+                <br>The dataset includes images belonging to three distinct classes:</br>
+                
+                Normal: Represents images of healthy lungs without any signs of cancer.
+                Bengin (Benign): Represents images containing benign nodules or growths in the lungs.
+                Malignant: Represents images containing malignant tumors or cancerous growths in the lungs.
+                These classes are crucial for training the model to differentiate between various lung conditions.
+                
+                Data Loading and Handling:
+                
+                The system loads the data using the h5py library, which is designed for working with HDF5 files. The code snippet provided demonstrates how the image and label data are extracted from the HDF5 file into NumPy arrays. This process ensures that the data is readily available in memory for training and evaluation.
+                
+                Data Visualization (Optional but Recommended):
+                
+                To gain further insight into the data, a sample of training images is visualized using matplotlib. This visualization helps to understand the characteristics of the images in each class and confirms that the images and labels are correctly loaded and associated. The inclusion of plot_datagen function suggests that data augmentation techniques could be applied to this dataset to improve model generalization, although this was not explicitly shown in the training code.
+                
+                This data description provides a clear understanding of the dataset used in your project, its structure, the classes involved, and how it is loaded and handled.</p>
+            <div class="method-image">
+                <img src="images/data.png" alt="Method Overview Diagram"> <!-- Placeholder for your method diagram -->
+            </div>
+        </section>
+
+        <section id="grasp-generation">
+            <h2>Model</h2>
+            <p>
+
+                The Lung Cancer Detection system utilizes a Convolutional Neural Network (CNN) model specifically designed for the task of classifying medical images of the lungs. The model architecture is defined to effectively extract relevant features from the input images and classify them into the predetermined categories: Normal, Bengin (Benign), and Malignant. <br><b>Model Architecture:</b></br>
+
+                    The CNN model is built using TensorFlow's Keras API and has a sequential structure, meaning that layers are added one after the other. The architecture consists of the following layers:
+                    
+                    Input Layer:
+                    
+                    The model starts with an Input layer that expects images with a specific shape, which is determined by the dimensions of your input data (image height, image width, and number of channels). This layer defines the input size for the entire network.
+                    Convolutional Layers:
+                    
+                    The model employs multiple Conv2D layers. These layers are the core of the CNN and are responsible for learning spatial hierarchies of features from the input images.
+                    Each Conv2D layer uses a specified number of filters (e.g., 32, 64, 128) with a defined kernel size (e.g., (5, 5), (3, 3)). The filters slide over the input image, performing convolutions to detect patterns such as edges, corners, and textures.
+                    The ReLU (Rectified Linear Unit) activation function is used after each convolutional layer to introduce non-linearity, which is essential for learning complex patterns.
+                    'Same' padding is applied to preserve the spatial dimensions of the input after convolution.
+                    Max Pooling Layers:
+                    
+                    Following each convolutional layer, a MaxPooling2D layer is used. These layers downsample the spatial dimensions of the feature maps by taking the maximum value within a defined pooling window (e.g., (2, 2)). Max pooling helps to reduce the computational cost, control overfitting, and make the model more robust to small shifts and distortions in the input images.
+                    Flatten Layer:
+                    
+                    After the final pooling layer, a Flatten layer is used to convert the 2D feature maps into a 1D vector. This is necessary to connect the convolutional part of the network to the fully connected layers.
+                    Dropout Layer:
+                    
+                    A Dropout layer is included to prevent overfitting. During training, this layer randomly sets a fraction of the input units to zero at each update. This helps to prevent the model from relying too heavily on specific neurons and encourages it to learn more robust and generalized features.
+                    Dense (Fully Connected) Layers:
+                    
+                    The flattened features are passed through two Dense layers. These are fully connected layers where each neuron is connected to every neuron in the previous layer. They perform non-linear transformations on the features learned by the convolutional layers. ReLU activation is used in the first dense layer.
+                    Output Layer:
+                    
+                    The final layer is a Dense layer with a number of units equal to the number of classes (three in this case: Normal, Benign, Malignant). The softmax activation function is used in this layer to output a probability distribution over the classes. The class with the highest probability is the model's prediction.
+                    Model Compilation and Training:
+                    
+                    The model is compiled using the 'adam' optimizer, which is a popular choice for optimizing neural networks. The 'sparse_categorical_crossentropy' loss function is used, which is appropriate for multi-class classification with integer labels. The 'accuracy' metric is used to evaluate the model's performance during training and testing.
+                    
+                    The model is trained using the fit method, where it learns to map the input images to the corresponding labels by minimizing the loss function. The training process involves multiple epochs (iterations over the entire training dataset) and uses batches of data for gradient descent optimization.
+                    
+                    Purpose:
+                    
+                    The purpose of this CNN model is to automatically analyze lung images, learn complex patterns that differentiate between normal, benign, and malignant cases, and provide a classification prediction. By leveraging the power of convolutional layers to extract spatial features, the model aims to improve the accuracy and efficiency of lung cancer detection compared to manual interpretation.</p>
+                <p>You can include a diagram or image of your model architecture.</p>
+            </p>
+            <div class="generation-images">
+                <img src="images/CNN.png.jpg" alt="Grasp Generation Top"> <!-- Placeholder -->
+                <img src="images/sparse.png" alt="Grasp Generation Bottom"> <!-- Placeholder -->
+                <!-- Add more images as needed -->
+            </div>
+        </section>
+
+        <section id="object-generation">
+            <h2>Results</h2>
+            <p>Results
+
+                The evaluation of the trained Convolutional Neural Network (CNN) model for Lung Cancer Detection provides insights into its performance on unseen data. The results are presented through standard evaluation metrics and visualizations.
+                
+                <br>1. Training and Validation Performance:</br>
+                
+                During the training process, the model's performance is tracked across epochs using the training and validation datasets.
+                Loss: Plots of the 'Sparse Categorical Crossentropy Loss' for both the training and validation sets are generated. A successful training process typically shows a decrease in loss over epochs, indicating that the model is learning to make better predictions. The difference between training and validation loss can indicate overfitting if the training loss continues to decrease while validation loss starts to increase.
+                Accuracy: Plots of 'Model Accuracy' for both training and validation sets are also generated. Accuracy is the proportion of correctly classified instances. An increasing accuracy over epochs for both sets suggests that the model is learning to correctly classify the images.
+                <br>2. Test Set Evaluation:</br>
+                
+                After training, the model is formally evaluated on the dedicated test dataset, which it has not seen during training.
+                Test Accuracy: The evaluate method provides the final test loss and test accuracy. The reported 'Test accuracy' (formatted to two decimal places as a percentage) is a key metric indicating how well the trained model generalizes to new, unseen lung images. A higher test accuracy suggests better performance in real-world scenarios.
+               <br> 3. Confusion Matrix:</br>
+                
+                A confusion matrix is generated to provide a more detailed breakdown of the model's classification performance.
+                The plot_heatmap function visualizes this matrix.
+                The confusion matrix shows the number of true positive, true negative, false positive, and false negative predictions for each class (Normal, Benign, Malignant).
+                Interpretation:
+                The diagonal elements of the matrix represent the number of correctly classified instances for each class (e.g., correctly classified Normal images as Normal).
+                Off-diagonal elements represent misclassifications (e.g., classifying a Malignant image as Normal).
+                Analyzing the confusion matrix helps identify which classes the model is good at predicting and where it makes mistakes. For instance, a high number of false positives for the Malignant class might indicate the model is too sensitive, while a high number of false negatives could mean it is missing actual malignant cases.
+                <br>4. Prediction Visualization:</br>
+                
+                The display_predictions function is used to visually inspect a sample of the model's predictions on the test set.
+                A specified number of test images (100 in your code) are displayed along with their predicted class labels and actual ground truth labels.
+                A visual indicator (green border for correct predictions, red border for incorrect predictions) is applied to each image.
+                Interpretation: This visualization provides a qualitative assessment of the model's performance. It allows you to see examples of images that were correctly classified and those that were misclassified, which can help in understanding the types of images the model struggles with.
+                In summary, the results section would present the learning curves (loss and accuracy plots), the final test accuracy, the confusion matrix for a detailed view of classification performance, and a visual display of sample predictions to provide both quantitative and qualitative evidence of the CNN model's effectiveness in detecting lung cancer</p>
+           </p>
+            <div class="generation-images">
+                <img src="images/matrix.png" alt="Object Generation Row 1"> <!-- Placeholder -->
+                <img src="images/sparse.png" alt="Object Generation Row 2"> <!-- Placeholder -->
+                <img src="images/results.png" alt="Object Generation Row 3"> <!-- Placeholder -->
+                <!-- Add more images as needed -->
+            </div>
+        </section>
+
+        <section id="joint-generation">
+            <h2>Perfomance Analysis on Dataset test</h2>
+            <p><b>Performance on the Test Dataset</b><br></br>
+
+                The trained Convolutional Neural Network (CNN) model was evaluated on the unseen test dataset to assess its generalization capabilities and overall performance in detecting lung cancer. The evaluation metrics and visualizations provide key insights into the model's effectiveness.
+                
+                <br><b>Overall Accuracy:</b></br>
+                
+                The primary metric for overall performance is the test accuracy. As reported by the loaded_model.evaluate function, the test accuracy provides the percentage of correctly classified images in the test set. A higher test accuracy indicates that the model can effectively distinguish between the different lung conditions (Normal, Benign, Malignant) on data it has not been trained on.
+                
+                (Here, you would state the actual test accuracy obtained from your code's output, e.g., "The test accuracy of the model was X.XX%.")
+                
+                Analysis of the Confusion Matrix:
+                
+                While the overall accuracy is a good starting point, the confusion matrix offers a more granular view of the model's performance for each class. Analyzing the confusion matrix helps us understand where the model excels and where it struggles:
+                
+                True Positives (Diagonal): The values on the diagonal of the confusion matrix represent the number of correctly classified instances for each class. A high number of true positives for each class indicates that the model is effective at identifying samples belonging to that class.
+                Example: "The confusion matrix shows that the model correctly identified X Normal cases, Y Benign cases, and Z Malignant cases."
+                False Positives (Off-Diagonal, Row-wise): These are instances where the model incorrectly predicted a class. For example, a false positive for 'Malignant' means the model predicted a case as malignant when it was actually normal or benign. A high number of false positives could lead to unnecessary follow-up tests and anxiety.
+                Example: "The model misclassified X instances as Malignant when they were actually Benign, and Y instances as Malignant when they were Normal."
+                False Negatives (Off-Diagonal, Column-wise): These are instances where the model failed to detect a class. For example, a false negative for 'Malignant' means the model predicted a case as normal or benign when it was actually malignant. A high number of false negatives is particularly concerning in medical diagnosis as it could lead to delayed treatment.
+                Example: "The model incorrectly predicted X Malignant cases as Normal and Y Malignant cases as Benign. This highlights a critical area for improvement, as missing malignant cases can have serious consequences."
+                (In your discussion, you would refer to the specific numbers from the confusion matrix generated by your code.)
+                
+                <br>Insights from Prediction Visualization:</br>
+                
+                The visualization of sample predictions provides qualitative insights into the model's behavior. By examining the correctly and incorrectly classified images, we can better understand the types of patterns or characteristics that the model is focusing on:
+                
+                Correct Predictions (Green Border): These examples demonstrate the model's ability to accurately identify the class of an image.
+                Incorrect Predictions (Red Border): Examining misclassified images can reveal potential weaknesses of the model. For instance, the model might struggle with images that are noisy, have ambiguous features, or are similar in appearance across different classes. This visualization can suggest areas where data augmentation or further model refinement might be beneficial.
+                (You can describe any interesting observations from the visualized predictions here, e.g., "The visualization shows that the model was generally accurate for clear cases, but sometimes struggled with images that had subtle features or artifacts." )<br></br>
+                
+                <br><b>Potential Areas for Improvement:</b></br>
+                
+                Based on the performance analysis, particularly the confusion matrix and prediction visualizations, you can identify potential areas for future work. This might include:
+                
+                Addressing class imbalances if evident in the confusion matrix.
+                Exploring different model architectures or hyperparameter tuning.
+                Implementing more advanced data augmentation techniques.
+                Investigating the impact of image preprocessing on performance.
+                By discussing the test dataset performance in this comprehensive manner, you demonstrate a thorough understanding of your model's strengths and weaknesses and provide valuable insights for future research.</p>
+            <div class="generation-images">
+                <img src="images/results.png" alt="Joint Generation Subset 1"> <!-- Placeholder -->
+                <img src="joint_generation_subset2.png" alt="Joint Generation Subset 2"> <!-- Placeholder -->
+                <!-- Add more images as needed -->
+            </div>
+        </section>
+
+        <section id="3d-visualization">
+            <h2>Conclusion</h2>
+            <p>Conclusion
+
+                This project successfully developed and implemented a Convolutional Neural Network (CNN) based system for the automated detection of lung cancer. By leveraging the power of deep learning, the system is capable of classifying medical images into three distinct categories: Normal, Benign, and Malignant.
+                
+                The developed CNN model, incorporating multiple convolutional, pooling, and dense layers, demonstrated its ability to learn relevant features from the image data. Training and evaluation on a dedicated dataset provided valuable insights into the model's performance.
+                
+                The results from the test dataset evaluation, including the overall test accuracy and the detailed confusion matrix, indicate that the model can effectively contribute to the process of lung cancer detection. While the model achieved a promising level of accuracy in distinguishing between the classes, the confusion matrix highlighted specific areas where the model's performance could be further improved, particularly concerning false negatives for the malignant class, which are critical in a medical context.
+                
+                The visualization of sample predictions provided a qualitative understanding of the model's behavior, showing instances where the model performed well and cases where misclassifications occurred. These insights are valuable for identifying potential limitations and guiding future work.
+                
+                This research contributes to the ongoing efforts to develop automated tools for medical image analysis and disease detection. While this system represents a significant step, further research and development are necessary to enhance its accuracy, robustness, and clinical applicability. Future work could explore more complex model architectures, larger and more diverse datasets, advanced data augmentation techniques, and methods to reduce false negatives, particularly for the malignant class.
+                
+                Ultimately, the goal is to create a system that can assist medical professionals in the early and accurate detection of lung cancer, potentially leading to improved patient outcomes and saving lives. This project demonstrates the potential of deep learning in achieving this objective.</p>
+           <!-- <p><a href="#" class="btn">Go to 3D Visualization Page</a></p> <!-- Placeholder link -->
+        </section>
+
+        <section id="citation">
+            <h2>Citation</h2>
+            <pre>
+Sources will be published
+            </pre>
+        </section>
+
+        <div class="template-attribution">
+            <p>College of Computer Science and Information Technology. Cousrse: Artificial Intelligence.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Lung Cancer Detection AI Project. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
